@@ -14,6 +14,14 @@ install:undeploy-podtatohead
 	kubectl wait --for=condition=available deployment/klc-controller-manager -n keptn-lifecycle-toolkit-system --timeout=300s
 
 
+	@echo "-----------------------------------"
+	@echo "Create Namespace and install Jaeger"
+	@echo "-----------------------------------"
+	kubectl create namespace observability --dry-run=client -o yaml | kubectl apply -f -
+	kubectl apply -f https://github.com/jaegertracing/jaeger-operator/releases/download/$(JAEGER_VERSION)/jaeger-operator.yaml -n observability
+	kubectl wait --for=condition=available deployment/jaeger-operator -n observability --timeout=300s
+	kubectl apply -f config/jaeger.yaml -n "$(TOOLKIT_NAMESPACE)"
+
 	@echo ""
 	@echo "------------------"
 	@echo "Configure Prometheus"
@@ -87,6 +95,15 @@ import-grafana-dashboard:
 	curl -X POST --insecure http://admin:admin@localhost:$(GRAFANA_PORT_FORWARD)/api/dashboards/import -H "Content-Type: application/json" -d @./assets/grafana_dashboard_overview.json
 	curl -X POST --insecure http://admin:admin@localhost:$(GRAFANA_PORT_FORWARD)/api/dashboards/import -H "Content-Type: application/json" -d @./assets/grafana_dashboard_workloads.json
 	curl -X POST --insecure http://admin:admin@localhost:$(GRAFANA_PORT_FORWARD)/api/dashboards/import -H "Content-Type: application/json" -d @./assets/grafana_dashboard_applications.json
+
+.PHONY: port-forward-jaeger
+port-forward-jaeger:
+	@echo ""
+	@echo "Open Jaeger in your Browser: http://localhost:16686"
+	@echo "CTRL-c to stop port-forward"
+
+	@echo ""
+	kubectl port-forward -n "$(TOOLKIT_NAMESPACE)" svc/jaeger-query 16686
 
 .PHONY: uninstall
 uninstall:
