@@ -60,7 +60,7 @@
     },
     {
       "matchPackageNames": ["denoland/deno"],
-      "extractVersion": "^alpine-(?<version>.*)$"
+      "versioning": "regex:^(?<compatibility>[a-z]+?)-(?<version>.*)$"
     }
   ],
   "regexManagers": [
