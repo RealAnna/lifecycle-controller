@@ -10,7 +10,7 @@
     ":automergePatch"
   ],
   "addLabels": ["dependencies"],
-  "forkProcessing": "enabled"
+  "forkProcessing": "enabled",
   "cloneSubmodules": true,
   "prConcurrentLimit": 15,
   "stabilityDays": 3,
