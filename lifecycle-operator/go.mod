@@ -3,7 +3,7 @@ module github.com/keptn/lifecycle-toolkit/lifecycle-operator
 go 1.20
 
 require (
-	dario.cat/mergo v1.0.0
+	dario.cat/mergo v1.0.1
 	github.com/argoproj/argo-rollouts v1.6.4
 	github.com/benbjohnson/clock v1.3.5
 	github.com/cloudevents/sdk-go/v2 v2.14.0
